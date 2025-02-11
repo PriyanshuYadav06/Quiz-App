@@ -15,10 +15,20 @@ const time=document.querySelector(".timer");
 const finalScore=document.querySelector(".FinalScore");
 const updateProgress=document.querySelector(".p");
 const motivate=document.querySelector(".motivation");
+const h=document.querySelector(".high");
+const hi=document.querySelector(".highh");
+let high_score=0;
 let count=1;
 let flag=false;
 let flagw=true;
 let wrongAnswer=0;
+high_score=localStorage.getItem("high_score");
+if(high_score==0){
+    h.style.display="none";
+}else{
+    h.style.display="block";
+    h.innerHTML=`Highest Score:${high_score}`;
+}
 StartButton.addEventListener("click",()=>{
     LandingPage.style.display="none";
     Section.style.display="block";
@@ -163,10 +173,17 @@ function updatePro(){
     }
 }
 function LoadFinalPage(){
+    clearInterval(window.quizTimer); 
     LandingPage.style.display="none";
     Section.style.display="none";
     FinalPage.style.display="block";
     finalScore.innerHTML=`${10-wrongAnswer}/10`;
+    if((10-wrongAnswer)>high_score){
+        high_score=10-wrongAnswer;
+        localStorage.setItem("high_score",high_score);
+        hi.innerHTML=`Congratulations! You just set a new high score:${high_score} 🎉`;
+        hi.style.display="block";
+    }
     updatePro();
 }
 function LoadNextQues(count){
@@ -253,6 +270,7 @@ function RestartTimer(){
         if (t < 0) {
             clearInterval(window.quizTimer);
             wrongAnswer++;
+            // LoadFinalPage(); we have to implement this feature
         }
         if(t<=30 && t>=14){
             document.body.style.background = "#CCE2C2";
@@ -305,5 +323,4 @@ document.querySelector(".rb").addEventListener("click", () => {
     location.reload(); 
     RestartTimer();
 });
-
 
